@@ -25,11 +25,11 @@ import numpy as np
 #   comprehension.
 
 # Your code here:
-# -----------------------------------------------
+
 text = "The quick brown fox jumps over the lazy dog!"
 
 # Write a list comprehension to tokenize the text and remove punctuation
-tokens = _ # Your code here
+tokens = [word.strip(".,!?;:'\"") for word in text.split()]
 
 # Expected output: ['The', 'quick', 'brown', 'fox', 'jumps', 'over', 'the', 'lazy', 'dog']
 print(tokens)
@@ -45,7 +45,11 @@ print(tokens)
 # Your code here:
 # -----------------------------------------------
 def tokenize(string: str) -> list:
-    pass # Your code
+    # Step 1: Split the string into words and remove punctuation
+    tokens = [word.strip(".,!?;:'\"").lower() for word in string.split()]
+    # Step 2: Filter unique words and sort them alphabetically
+    unique_tokens = sorted(set(tokens))
+    return unique_tokens
 
 
 # -----------------------------------------------
@@ -74,7 +78,12 @@ def tokenize(string: str) -> list:
 
 # Your code here:
 # -----------------------------------------------
-word_frequencies = _ # Your code here
+word_frequencies = {word: tokens.count(word) for word in set(tokens)}
+print(word_frequencies)  # {'quick': 1, 'over': 1, 'fox': 1, 'lazy': 1, 'dog': 1, 'jumps': 1, 'the': 2, 'brown': 1}
+
+# Step 2: Filter words with frequency > 1
+frequent_words = {word: count for word, count in word_frequencies.items() if count > 1}
+print(frequent_words)  # {'the': 2}
 
 # Expected output example: {'the': 2, 'quick': 1, ...}
 print(word_frequencies)
@@ -90,7 +99,13 @@ print(word_frequencies)
 # Your code here:
 # -----------------------------------------------
 def token_counts(string: str, k: int = 1) -> dict:
-    pass # Your code
+    # Step 1: Tokenize the string (remove punctuation and convert to lowercase)
+    tokens = [word.strip(".,!?;:'\"").lower() for word in string.split()]
+    # Step 2: Count word frequencies
+    word_frequencies = {word: tokens.count(word) for word in set(tokens)}
+    # Step 3: Filter tokens that occur more than k times
+    filtered_frequencies = {word: count for word, count in word_frequencies.items() if count > k}
+    return filtered_frequencies
 
 # test:
 text_hist = {'the': 2, 'quick': 1, 'brown': 1, 'fox': 1, 'jumps': 1, 'over': 1, 'lazy': 1, 'dog': 1}
@@ -121,7 +136,14 @@ all(text_hist[key] == value for key, value in token_counts(text).items())
 
 # Your code here:
 # -----------------------------------------------
-token_to_id = _ # Your code here
+unique_tokens = sorted(set(tokens))
+
+# Step 2: Create the token_to_id dictionary
+token_to_id = {token: idx for idx, token in enumerate(unique_tokens)}
+
+# Step 3: Create the id_to_token dictionary
+id_to_token = {idx: token for token, idx in token_to_id.items()}
+
 
 # Expected output: {'dog': 0, 'quick': 1, 'fox': 2, 'the': 3, 'over': 4, 'lazy': 5, 'brown': 6, 'jumps': 7}
 print(token_to_id)
@@ -133,7 +155,7 @@ print(token_to_id)
 #
 # Your code here:
 # -----------------------------------------------
-id_to_token = _ # Your code here
+id_to_token = {v: k for k, v in token_to_id.items()}
 
 # tests: 
 # test 1
